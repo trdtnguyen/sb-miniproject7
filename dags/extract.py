@@ -44,8 +44,8 @@ dag = DAG(
     dag_id='marketvol',
     default_args=default_args,
     description='A simple DAG',
-    #schedule_interval="* 18 * * 1,2,3,4,5"
-    schedule_interval="@once"
+    schedule_interval="* 18 * * 1,2,3,4,5"
+    #schedule_interval="@once"
 )
 
 t0 = BashOperator(
