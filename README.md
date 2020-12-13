@@ -29,3 +29,7 @@ Step | task id(s) | Description
 3| `query_data` | Query data in database location
 
 The task dependencies is illustrated as the figure below:
+
+![Dag graph view](images/dag_graphview.jpg)
+
+![Dag graph view](images/dag_treeview.jpg)
