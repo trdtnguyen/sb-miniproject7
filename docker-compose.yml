@@ -1,13 +1,25 @@
 version: "3.7"
 services:
+    airflow-backend:
+        image: mysql:latest
+        cap_add:
+            - SYS_NICE
+        command: --default-authentication-plugin=mysql_native_password
+        networks:
+            - mynet
+        volumes:
+            - "/var/lib/mysql"
+        env_file:
+            - mysql.env
     airflow-engine:
         build: .
         container_name: airflow
-        #command: tail -f /dev/null
+        depends_on:
+            - airflow-backend
         command: /bin/sh -c "/root/airflow/setup.sh"
         init: true
         ports:
-            - "8080:8080"
+            - "8084:8080"
         environment:
             - PYTHONPATH=/root/airflow/
         env_file:
