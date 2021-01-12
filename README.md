@@ -33,3 +33,23 @@ The task dependencies is illustrated as the figure below:
 ![Dag graph view](images/dag_graphview.jpg)
 
 ![Dag graph view](images/dag_treeview.jpg)
+
+## Note for using Celery Executor
+Celery Executor requrie other RDBMS such as MySQL, Postgresql rather than SQLite. So the first step is install the RDBMS and the related connector. This project using MySQL as the back-end DBMS.
+
+The practical method to use airflow with mysql and celery is wrapping them inside a docker container
+```
+RUN pip install  apache-airflow[mysql,celery]==1.10.12 --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-1.10.12/constraints-3.7.txt"
+RUN pip install  mysql-connector-python
+```
+
+Beside that, we need to modify the `airflow.cfg` file to explicit using Celery Executor
+One trick when using MySQL with Airflow inside a docker container is call `airflow initdb` two times. 
+
+* The firs time to generate all default config files, included `airflow.cfg` file. 
+* Then we could edit `airflow.cfg` file to explicitly using Celery Executor.
+```
+sql_alchemy_conn=mysql://{user}:{password}@airflow-backend/{db}
+executor=CeleryExecutor
+```
+* Finally, we call `airflow initdb` the second time correct the config.
